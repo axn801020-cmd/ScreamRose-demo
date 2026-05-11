@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ScreamRose | 購物車</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="cart.css">
+  <script src="header.js" defer></script>
+</head>
+<body>
+
+  <header class="site-header">
+	<h1>ScreamRose Guitars</h1>
+	 <div style="display:flex; align-items:center; gap:16px;">
+	   <span id="auth-area"></span>
+	   <a href="index.html" class="back-link">← 繼續購物</a>
+  </header>
+
+  <main>
+    <section class="cart-container">
+      <h2>購物車</h2>
+
+      <!-- 由 cart.js 動態填入 -->
+      <div id="cart-list"></div>
+
+      <div class="cart-total">
+        <span>總金額</span>
+        <span id="total-price">NT$ 0</span>
+      </div>
+
+      <button class="checkout-btn">前往結帳</button>
+      <p class="shipping">✓ 全台免運　✓ 原廠硬盒　✓ 2年保固</p>
+    </section>
+  </main>
+
+  <script src="cart.js"></script>
+
+</body>
+</html>	

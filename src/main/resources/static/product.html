@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <title>ScreamRose | 商品詳細</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .product-features {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 24px;
+    }
+    .product-features li {
+      padding: 8px 0;
+      border-bottom: 1px solid #222;
+      color: #ccc;
+      font-size: 15px;
+      line-height: 1.6;
+    }
+    .product-features li::before {
+      content: "— ";
+      color: #c9a44c;
+    }
+    .product-features li:last-child {
+      border-bottom: none;
+    }
+
+    /* ===== 縮圖列 ===== */
+    .thumbnail-strip {
+      display: flex;
+      gap: 10px;
+      margin-top: 14px;
+      flex-wrap: wrap;
+    }
+    .thumb-item {
+      width: 80px;
+      height: 60px;
+      object-fit: cover;
+      border-radius: 4px;
+      border: 2px solid transparent;
+      cursor: pointer;
+      opacity: 0.55;
+      transition: opacity 0.2s, border-color 0.2s;
+    }
+    .thumb-item:hover {
+      opacity: 0.85;
+    }
+    .thumb-item.active {
+      border-color: #c9a44c;
+      opacity: 1;
+    }
+
+    /* ===== 主圖淡入淡出 ===== */
+    #mainImage {
+      transition: opacity 0.2s ease;
+    }
+
+    .audio-section {
+      margin-top: 30px;
+      padding: 20px 24px;
+      background: #1a1a1a;
+      border: 1px solid #2a2a2a;
+      border-radius: 10px;
+    }
+    .audio-label {
+      font-size: 13px;
+      color: #777;
+      letter-spacing: 1px;
+      margin: 0 0 16px;
+    }
+    .audio-player {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .play-btn {
+      width: 48px;
+      height: 48px;
+      min-width: 48px;
+      border-radius: 50%;
+      background: #b30000;
+      border: none;
+      color: #fff;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+    }
+    .play-btn:hover { background: #ff1a1a; }
+    .play-btn:active { transform: scale(0.95); }
+    .play-btn svg {
+      width: 18px;
+      height: 18px;
+      fill: #fff;
+    }
+    .progress-wrap {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .progress-bar {
+      width: 100%;
+      height: 4px;
+      background: #333;
+      border-radius: 2px;
+      cursor: pointer;
+      position: relative;
+    }
+    .progress-bar:hover { height: 6px; }
+    .progress-fill {
+      height: 100%;
+      background: #c9a44c;
+      border-radius: 2px;
+      width: 0%;
+    }
+    .time-display {
+      font-size: 12px;
+      color: #555;
+    }
+  </style>
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script src="cart.js" defer></script>
+  <script src="header.js" defer></script>
+</head>
+<body>
+
+<header class="top-bar">
+  <a href="index.html" class="brand" style="text-decoration:none; color:inherit;">ScreamRose</a>
+  <nav>
+    <a href="index.html">← 回到首頁</a>
+  </nav>
+  <div class="cart">
+    <span id="auth-area"></span>
+     &nbsp;&nbsp;🛒 <span id="cart-count">0</span>
+  </div>
+</header>
+
+<section class="product-page">
+  <div class="gallery">
+    <div class="main-preview">
+      <img id="mainImage" src="" alt="ScreamRose Les Paul">
+    </div>
+    <!-- ===== 縮圖列（由 JS 動態生成）===== -->
+    <div class="thumbnail-strip" id="thumbnailStrip"></div>
+  </div>
+
+  <div class="details">
+    <h1 id="productName"></h1>
+    <p class="subtitle" id="productSeries"></p>
+    <p class="price" id="productPrice"></p>
+    <p class="desc" id="productDesc"></p>
+
+    <!-- 試聽播放器 -->
+    <div class="audio-section">
+      <p class="audio-label">🎵 試聽音色</p>
+      <div class="audio-player">
+        <button class="play-btn" id="playBtn" onclick="togglePlay()">
+          <svg id="icon-play" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="6,3 20,12 6,21"/>
+          </svg>
+          <svg id="icon-pause" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="display:none;">
+            <rect x="5" y="3" width="4" height="18"/>
+            <rect x="15" y="3" width="4" height="18"/>
+          </svg>
+        </button>
+        <div class="progress-wrap">
+          <div class="progress-bar" id="progressBar" onclick="seekAudio(event)">
+            <div class="progress-fill" id="progressFill"></div>
+          </div>
+          <span class="time-display" id="timeDisplay">0:00 / 0:00</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="quantity" style="margin-top:24px;">
+      <button id="minus">−</button>
+      <input type="text" id="qty" value="1">
+      <button id="plus">＋</button>
+    </div>
+
+    <button class="add-cart"
+      id="addCartBtn"
+      data-id=""
+      data-name=""
+      data-color=""
+      data-price=""
+      data-image="">
+      加入購物車
+    </button>
+  </div>
+</section>
+
+<section class="specs">
+  <h2>Specifications</h2>
+  <table>
+    <tr><td>琴身</td><td>Mahogany</td></tr>
+    <tr><td>面板</td><td>Maple</td></tr>
+    <tr><td>琴頸</td><td>Mahogany</td></tr>
+    <tr><td>指板</td><td>Ebony</td></tr>
+    <tr><td>拾音器</td><td>ScreamRose Alnico HH</td></tr>
+    <tr><td>琴橋</td><td>Tune-O-Matic</td></tr>
+  </table>
+</section>
+
+<footer class="footer">
+  © 2026 ScreamRose Guitars. All Rights Reserved.
+</footer>
+
+<script>
+  const params = new URLSearchParams(window.location.search);
+  const id = params.get("id");
+
+  let audio;
+  let isPlaying = false;
+
+  // ===== 載入商品基本資料 =====
+  fetch("http://localhost:8080/api/products/" + id)
+    .then(r => r.json())
+    .then(product => {
+      if (!product || !product.id) {
+        document.body.innerHTML = "<p style='color:#fff;padding:40px'>找不到商品，<a href='index.html' style='color:#c9a44c'>回到首頁</a></p>";
+        return;
+      }
+
+      document.getElementById("mainImage").src = product.image;
+      document.getElementById("productName").textContent = product.name;
+      document.getElementById("productSeries").textContent = (product.series || "") + " · " + (product.color || "");
+      document.getElementById("productPrice").textContent = "NT$ " + Number(product.price).toLocaleString();
+      document.getElementById("productDesc").innerHTML = product.description || "";
+      document.title = "ScreamRose | " + (product.color || product.name);
+
+      const btn = document.getElementById("addCartBtn");
+      btn.dataset.id    = product.id;
+      btn.dataset.name  = product.name;
+      btn.dataset.color = product.color;
+      btn.dataset.price = product.price;
+      btn.dataset.image = product.image;
+
+      if (product.audio) {
+        audio = new Audio(product.audio);
+        audio.addEventListener("timeupdate", updateProgress);
+        audio.addEventListener("loadedmetadata", updateProgress);
+        audio.addEventListener("ended", function() {
+          isPlaying = false;
+          document.getElementById("icon-play").style.display = "block";
+          document.getElementById("icon-pause").style.display = "none";
+          document.getElementById("progressFill").style.width = "0%";
+          audio.currentTime = 0;
+        });
+      }
+
+      // ===== 載入多角度圖片 =====
+      loadProductImages(id, product.image);
+    });
+
+  // ===== 多角度縮圖功能 =====
+  
+  // 改成接收第二個參數 mainImageUrl
+  function loadProductImages(productId, mainImageUrl) {
+      fetch("http://localhost:8080/api/products/" + productId + "/images")
+        .then(r => r.json())
+        .then(images => {
+          const strip = document.getElementById("thumbnailStrip");
+          const mainImg = document.getElementById("mainImage");
+          strip.innerHTML = "";
+
+          // ── 第一張縮圖 = 商品主圖 ──
+          const mainThumb = document.createElement("img");
+          mainThumb.src = mainImageUrl;
+          mainThumb.alt = "主圖";
+          mainThumb.className = "thumb-item active";
+
+          mainThumb.addEventListener("click", function() {
+            mainImg.style.opacity = "0";
+            setTimeout(function() {
+              mainImg.src = mainImageUrl;
+              mainImg.style.opacity = "1";
+            }, 200);
+            document.querySelectorAll(".thumb-item")
+              .forEach(t => t.classList.remove("active"));
+            mainThumb.classList.add("active");
+          });
+
+          strip.appendChild(mainThumb);
+
+          if (!images || images.length === 0) return;
+
+          // ── 過濾掉跟主圖重複的角度照片 ──
+          const filteredImages = images.filter(img => img.imageUrl !== mainImageUrl);
+
+          filteredImages.forEach((img, index) => {
+            const thumb = document.createElement("img");
+            thumb.src = img.imageUrl;
+            thumb.alt = "角度 " + (index + 1);
+            thumb.className = "thumb-item";
+
+            thumb.addEventListener("click", function() {
+              mainImg.style.opacity = "0";
+              setTimeout(function() {
+                mainImg.src = img.imageUrl;
+                mainImg.style.opacity = "1";
+              }, 200);
+              document.querySelectorAll(".thumb-item")
+                .forEach(t => t.classList.remove("active"));
+              thumb.classList.add("active");
+            });
+
+            strip.appendChild(thumb);
+          });
+        });
+    }
+
+  // ===== 音訊播放功能 =====
+  function togglePlay() {
+    if (!audio) return;
+    if (isPlaying) {
+      audio.pause();
+      document.getElementById("icon-play").style.display = "block";
+      document.getElementById("icon-pause").style.display = "none";
+    } else {
+      audio.play();
+      document.getElementById("icon-play").style.display = "none";
+      document.getElementById("icon-pause").style.display = "block";
+    }
+    isPlaying = !isPlaying;
+  }
+
+  function updateProgress() {
+    if (!audio || isNaN(audio.duration)) return;
+    const pct = (audio.currentTime / audio.duration) * 100;
+    document.getElementById("progressFill").style.width = pct + "%";
+    document.getElementById("timeDisplay").textContent =
+      formatTime(audio.currentTime) + " / " + formatTime(audio.duration);
+  }
+
+  function seekAudio(e) {
+    if (!audio || isNaN(audio.duration)) return;
+    const bar = document.getElementById("progressBar");
+    const ratio = e.offsetX / bar.offsetWidth;
+    audio.currentTime = ratio * audio.duration;
+  }
+
+  function formatTime(s) {
+    const m = Math.floor(s / 60);
+    const sec = Math.floor(s % 60);
+    return m + ":" + String(sec).padStart(2, "0");
+  }
+
+  // ===== 數量增減 =====
+  document.getElementById("plus").addEventListener("click", function() {
+    const qty = document.getElementById("qty");
+    qty.value = parseInt(qty.value) + 1;
+  });
+
+  document.getElementById("minus").addEventListener("click", function() {
+    const qty = document.getElementById("qty");
+    if (parseInt(qty.value) > 1) qty.value = parseInt(qty.value) - 1;
+  });
+</script>
+
+</body>
+</html>

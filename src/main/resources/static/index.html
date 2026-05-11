@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <title>ScreamRose Les Paul | Official Store</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script src="script.js" defer></script>
+  <script src="cart.js" defer></script>
+  <script src="header.js" defer></script>
+</head>
+<body>
+
+<!-- Header -->
+<header class="top-bar">
+  <a href="index.html" class="brand" style="text-decoration:none; color:inherit;">ScreamRose</a>
+  <nav>
+    <a href="guitars.html">Guitars</a>
+    <a href="artists.html">Artists</a>
+    <a href="support.html">Support</a>
+  </nav>
+  <div class="cart">
+	<span id="auth-area"></span>
+	 &nbsp;&nbsp;🛒 <span id="cart-count">0</span>
+  </div>
+</header>
+
+<!-- Product Section -->
+<section class="product-page">
+  <div class="gallery">
+    <div class="main-preview">
+      <img id="mainImage" src="images/lp-cherry.png" alt="ScreamRose Les Paul">
+    </div>
+    <div class="thumbnails">
+		
+		<a href="product.html?id=1">
+		  <img src="images/lp-cherry.png" class="thumb active" data-src="images/lp-cherry.png" alt="Cherry Sunburst">
+		</a>
+		<a href="product.html?id=2">
+		  <img src="images/lp-black.png" class="thumb" data-src="images/lp-black.png" alt="Ebony Black">
+		</a>
+		<a href="product.html?id=3">
+		  <img src="images/lp-goldtop.png" class="thumb" data-src="images/lp-goldtop.png" alt="Vintage Goldtop">
+		</a>
+		<a href="product.html?id=4">
+		  <img src="images/lp-tobacco.png" class="thumb" data-src="images/lp-tobacco.png" alt="Tobacco Burst">
+		</a>
+		</div>
+    </div>
+  </div>
+
+  <div class="details">
+    <h1 id="productName">ScreamRose Les Paul</h1>
+    <p class="subtitle" id="productSeries">Vintage Collection · Heritage Cherry Sunburst</p>
+    <p class="price" id="productPrice">NT$ 128,000</p>
+
+    <p class="desc">
+      ScreamRose Les Paul Custom 結合經典厚實音色與現代工藝，
+      Mahogany 琴身搭配 Maple 面板，
+      提供飽滿低頻、清晰高頻與無可取代的延音表現。
+    </p>
+
+    <div class="options">
+      <label for="colorSelect">顏色</label>
+      <select id="colorSelect">
+		<option value="1">Heritage Cherry Sunburst</option>
+		<option value="2">Ebony Black</option>
+		<option value="3">Vintage Goldtop</option>
+		<option value="4">Tobacco Burst</option>
+      </select>
+    </div>
+
+    <div class="quantity">
+      <button id="minus">−</button>
+      <input type="text" id="qty" value="1">
+      <button id="plus">＋</button>
+    </div>
+
+    <button class="add-cart"
+      data-id="sr-lp-cherry"
+      data-name="ScreamRose Les Paul"
+      data-color="Heritage Cherry Sunburst"
+      data-price="128000"
+      data-image="images/lp-cherry.png">
+      加入購物車
+    </button>
+  </div>
+</section>
+
+<!-- 購物車區塊 -->
+<section class="cart-container">
+  <h2>購物車</h2>
+  <div id="cart-list"></div>
+  <div class="cart-total">
+    <span>總金額</span>
+    <span id="total-price">NT$ 0</span>
+  </div>
+  <button class="checkout-btn">前往結帳</button>
+  <p class="shipping">✓ 全台免運　✓ 原廠硬盒　✓ 2年保固</p>
+</section>
+
+<!-- 規格表 -->
+<section class="specs">
+  <h2>Specifications</h2>
+  <table>
+    <tr><td>琴身</td><td>Mahogany</td></tr>
+    <tr><td>面板</td><td>Maple</td></tr>
+    <tr><td>琴頸</td><td>Mahogany</td></tr>
+    <tr><td>指板</td><td>Ebony</td></tr>
+    <tr><td>拾音器</td><td>ScreamRose Alnico HH</td></tr>
+    <tr><td>琴橋</td><td>Tune-O-Matic</td></tr>
+  </table>
+</section>
+
+<footer class="footer">
+  © 2026 ScreamRose Guitars. All Rights Reserved.
+</footer>
+
+</body>
+</html>	

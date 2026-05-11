@@ -1,0 +1,18 @@
+spring:
+  datasource:
+    url: jdbc:mysql://guitar-store-screamrose.i.aivencloud.com:18863/guitar_store?useSSL=true&requireSSL=true&serverTimezone=Asia/Taipei
+    username: avnadmin
+    password: AVNS_IOAqaXmfO_Y4KY1qqFl
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+
+# Cloudinary 設定
+cloudinary:
+  cloud-name: dwmyk1ycx
+  api-key: 573529115495586
+  api-secret: wHhJSV4NNgVQr87nAMy_m4XXpGw

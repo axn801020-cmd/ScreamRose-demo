@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ScreamRose | ZERO</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="header.js" defer></script>
+  <style>
+    * { box-sizing: border-box; }
+
+    /* HERO */
+    .hero {
+      position: relative;
+      height: 100vh;
+      min-height: 700px;
+      overflow: hidden;
+    }
+    .hero-img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 20%;
+    }
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to right, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.2) 60%, transparent 100%);
+      z-index: 1;
+    }
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, transparent 55%);
+      z-index: 1;
+    }
+    .hero-content {
+      position: absolute;
+      bottom: 60px;
+      left: 60px;
+      z-index: 2;
+    }
+    .hero-tag {
+      font-size: 11px;
+      letter-spacing: 4px;
+      color: #c9a44c;
+      margin: 0 0 16px;
+    }
+    .hero-name {
+      font-size: 110px;
+      font-weight: 700;
+      letter-spacing: 14px;
+      margin: 0;
+      line-height: 0.9;
+      color: #fff;
+    }
+    .hero-band {
+      font-size: 15px;
+      letter-spacing: 5px;
+      color: #666;
+      margin: 20px 0 0;
+    }
+    .hero-scroll {
+      position: absolute;
+      bottom: 60px;
+      right: 60px;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      color: #333;
+      font-size: 10px;
+      letter-spacing: 3px;
+    }
+    .hero-scroll::after {
+      content: "";
+      width: 1px;
+      height: 50px;
+      background: linear-gradient(to bottom, #333, transparent);
+    }
+
+    /* 宣言 */
+    .manifesto {
+      background: #000;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      border-bottom: 1px solid #0f0f0f;
+    }
+    .manifesto-block {
+      padding: 90px 60px;
+    }
+    .manifesto-block:first-child {
+      border-right: 1px solid #0f0f0f;
+    }
+    .manifesto-lang {
+      font-size: 10px;
+      letter-spacing: 4px;
+      color: #555;
+      margin: 0 0 28px;
+    }
+    .manifesto-headline {
+      font-size: 54px;
+      font-weight: 700;
+      color: #fff;
+      margin: 0 0 12px;
+      line-height: 1.1;
+    }
+    .manifesto-role {
+      font-size: 15px;
+      color: #777;
+      letter-spacing: 2px;
+      margin: 0 0 36px;
+    }
+    .manifesto-quote {
+      font-size: 16px;
+      color: #888;
+      font-style: italic;
+      line-height: 1.9;
+      margin: 0;
+      padding-left: 20px;
+      border-left: 2px solid #b30000;
+    }
+
+    /* 全幅照片 */
+    .full-photo {
+      position: relative;
+      height: 85vh;
+      overflow: hidden;
+    }
+    .full-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 25%;
+      filter: brightness(0.65) contrast(1.15);
+      transition: transform 6s ease;
+    }
+    .full-photo:hover img { transform: scale(1.04); }
+    .full-photo-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 60%);
+    }
+    .full-photo-caption {
+      position: absolute;
+      bottom: 50px;
+      left: 60px;
+      right: 60px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+    .full-photo-caption span {
+      font-size: 12px;
+      letter-spacing: 3px;
+      color: #777;
+    }
+
+    /* LOGO + 樂團 — Logo 大且置中 */
+    .band-section {
+      background: #000;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: 560px;
+      border-bottom: 1px solid #0f0f0f;
+    }
+    .band-logo-side {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 80px;
+      border-right: 1px solid #0f0f0f;
+      background: #020202;
+      gap: 32px;
+    }
+    .band-logo-side img {
+      width: 360px;
+      max-width: 90%;
+      transition: transform 0.4s;
+    }
+    .band-logo-side img:hover { transform: scale(1.04); }
+    .band-logo-label {
+      font-size: 12px;
+      letter-spacing: 4px;
+      color: #666;
+    }
+    .band-text-side {
+      padding: 80px 60px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .band-eyebrow {
+      font-size: 10px;
+      letter-spacing: 4px;
+      color: #b30000;
+      margin: 0 0 20px;
+    }
+    .band-title {
+      font-size: 44px;
+      font-weight: 700;
+      letter-spacing: 6px;
+      margin: 0 0 28px;
+      color: #fff;
+    }
+    .band-desc {
+      font-size: 16px;
+      color: #888;
+      line-height: 2;
+      margin: 0 0 48px;
+    }
+    .band-stats {
+      display: flex;
+      gap: 40px;
+      padding-top: 40px;
+      border-top: 1px solid #1a1a1a;
+    }
+    .band-stat-num {
+      display: block;
+      font-size: 34px;
+      font-weight: 700;
+      color: #c9a44c;
+      margin-bottom: 6px;
+    }
+    .band-stat-label {
+      font-size: 12px;
+      letter-spacing: 2px;
+      color: #666;
+    }
+
+    /* 照片牆 */
+    .photo-grid {
+      display: grid;
+      grid-template-columns: 1.7fr 1fr 1fr;
+      gap: 3px;
+      background: #000;
+    }
+    .photo-grid-item {
+      overflow: hidden;
+      position: relative;
+    }
+    .photo-grid-item img {
+      width: 100%;
+      height: 480px;
+      object-fit: cover;
+      display: block;
+      filter: brightness(0.7) contrast(1.1) saturate(0.85);
+      transition: filter 0.4s, transform 0.5s;
+    }
+    .photo-grid-item:first-child img { height: 480px; }
+    .photo-grid-item:hover img {
+      filter: brightness(0.9) contrast(1.1) saturate(1.1);
+      transform: scale(1.05);
+    }
+
+    /* 公仔區 */
+    .figure-section {
+      background: #000;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: 620px;
+      border-top: 1px solid #0f0f0f;
+    }
+    .figure-img {
+      overflow: hidden;
+    }
+    .figure-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: brightness(0.75) contrast(1.1);
+      transition: transform 0.5s;
+    }
+    .figure-img:hover img { transform: scale(1.04); }
+    .figure-text {
+      padding: 80px 60px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      border-left: 1px solid #0f0f0f;
+    }
+    .figure-eyebrow {
+      font-size: 10px;
+      letter-spacing: 4px;
+      color: #b30000;
+      margin: 0 0 24px;
+    }
+    .figure-title {
+      font-size: 50px;
+      font-weight: 700;
+      color: #fff;
+      margin: 0 0 24px;
+      line-height: 1.1;
+    }
+    .figure-desc {
+      font-size: 16px;
+      color: #888;
+      line-height: 2;
+      margin: 0 0 40px;
+    }
+    .figure-badge {
+      display: inline-block;
+      padding: 10px 24px;
+      border: 1px solid #444;
+      color: #888;
+      font-size: 13px;
+      letter-spacing: 3px;
+      width: fit-content;
+    }
+
+    /* 簽名款吉他 */
+    .collection-section {
+      background: #000;
+      padding: 90px 60px;
+      border-top: 1px solid #0f0f0f;
+    }
+    .collection-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 50px;
+      padding-bottom: 30px;
+      border-bottom: 1px solid #0f0f0f;
+    }
+    .collection-eyebrow {
+      font-size: 10px;
+      letter-spacing: 4px;
+      color: #b30000;
+      margin: 0 0 12px;
+    }
+    .collection-title {
+      font-size: 42px;
+      font-weight: 700;
+      margin: 0;
+      color: #fff;
+    }
+    .collection-link {
+      color: #c9a44c;
+      text-decoration: none;
+      font-size: 12px;
+      letter-spacing: 3px;
+      border-bottom: 1px solid #c9a44c;
+      padding-bottom: 4px;
+      transition: opacity 0.2s;
+    }
+    .collection-link:hover { opacity: 0.7; }
+    .collection-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 3px;
+    }
+    .collection-card {
+      text-decoration: none;
+      display: block;
+      position: relative;
+      overflow: hidden;
+    }
+    .collection-card img {
+      width: 100%;
+      aspect-ratio: 1;
+      object-fit: cover;
+      display: block;
+      filter: brightness(0.7) contrast(1.1) saturate(0.8);
+      transition: filter 0.4s, transform 0.5s;
+    }
+    .collection-card:hover img {
+      filter: brightness(0.95) contrast(1.1) saturate(1.1);
+      transform: scale(1.06);
+    }
+    .collection-card-info {
+      padding: 16px 4px 0;
+    }
+    .collection-card-color {
+      font-size: 14px;
+      color: #888;
+      margin: 0 0 4px;
+    }
+    .collection-card-price {
+      font-size: 16px;
+      color: #ff4d4d;
+      margin: 0;
+    }
+  </style>
+</head>
+<body>
+
+<header class="top-bar">
+  <a href="index.html" class="brand" style="text-decoration:none; color:inherit;">ScreamRose</a>
+  <nav>
+    <a href="guitars.html">Guitars</a>
+    <a href="artists.html" style="color:#fff;">Artists</a>
+    <a href="support.html">Support</a>
+  </nav>
+  <div class="cart">
+    <span id="auth-area"></span>
+    &nbsp;&nbsp;🛒 <span id="cart-count">0</span>
+  </div>
+</header>
+
+<!-- HERO -->
+<div class="hero">
+  <img class="hero-img" src="images/artist-new2.jpg" alt="ZERO">
+  <div class="hero-content">
+    <p class="hero-tag">SCREAMROSE · LEAD GUITARIST</p>
+    <h1 class="hero-name">ZERO</h1>
+    <p class="hero-band">ScreamRose</p>
+  </div>
+  <div class="hero-scroll">SCROLL</div>
+</div>
+
+<!-- 宣言 -->
+<div class="manifesto">
+  <div class="manifesto-block">
+    <p class="manifesto-lang">ENGLISH</p>
+    <h2 class="manifesto-headline">Born to be free.</h2>
+    <p class="manifesto-role">ZERO — GUITARIST OF SCREAMROSE</p>
+    <p class="manifesto-quote">Hard rock isn't a genre. It's a way of life.</p>
+  </div>
+  <div class="manifesto-block">
+    <p class="manifesto-lang">中文</p>
+    <h2 class="manifesto-headline">為了自由而生。</h2>
+    <p class="manifesto-role">ZERO — ScreamRose 吉他手</p>
+    <p class="manifesto-quote">硬搖滾不是一種曲風，是一種活法。</p>
+  </div>
+</div>
+
+<!-- 全幅照片 -->
+<div class="full-photo">
+  <img src="images/artist-new1.jpg" alt="ZERO Live">
+  <div class="full-photo-overlay"></div>
+  <div class="full-photo-caption">
+    <span>LIVE PERFORMANCE</span>
+    <span>SCREAMROSE</span>
+  </div>
+</div>
+
+<!-- LOGO + 樂團介紹 -->
+<div class="band-section">
+  <div class="band-logo-side">
+    <img src="images/logo-black.png" alt="ScreamRose Logo">
+    <p class="band-logo-label">EST. TAIWAN</p>
+  </div>
+  <div class="band-text-side">
+    <p class="band-eyebrow">THE BAND</p>
+    <h2 class="band-title">SCREAMROSE</h2>
+    <p class="band-desc">台灣美式硬搖滾樂團，以兇猛薔薇為圖騰，將狂野與美感融為一體。ZERO 作為樂團靈魂吉他手，將這股力量注入每一把 ScreamRose 簽名款吉他之中。</p>
+    <div class="band-stats">
+      <div>
+        <span class="band-stat-num">5+</span>
+        <span class="band-stat-label">MEMBERS</span>
+      </div>
+      <div>
+        <span class="band-stat-num">4</span>
+        <span class="band-stat-label">SIGNATURE GUITARS</span>
+      </div>
+      <div>
+        <span class="band-stat-num">TW</span>
+        <span class="band-stat-label">ORIGIN</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 照片牆 -->
+<div class="photo-grid">
+  <div class="photo-grid-item">
+    <img src="images/artist-hero.jpg" alt="ZERO">
+  </div>
+  <div class="photo-grid-item">
+    <img src="images/artist-new1.jpg" alt="ZERO Live">
+  </div>
+  <div class="photo-grid-item">
+    <img src="images/artist-3.jpg" alt="ZERO BW">
+  </div>
+</div>
+
+<!-- 公仔 -->
+<div class="figure-section">
+  <div class="figure-img">
+    <img src="images/artist-figure.jpg" alt="ZERO Bandai Figure">
+  </div>
+  <div class="figure-text">
+    <p class="figure-eyebrow">BANDAI × SCREAMROSE</p>
+    <h2 class="figure-title">The<br>Figure</h2>
+    <p class="figure-desc">2024 年，ZERO 成為台灣少數以搖滾樂手身份獲 Bandai 授權製作個人造型公仔的藝術家。從 3D 掃描建模到細節雕塑，每個細節都忠實還原舞台上的 ZERO。</p>
+    <span class="figure-badge">BANDAI LIMITED EDITION</span>
+  </div>
+</div>
+
+<!-- 簽名款吉他 -->
+<div class="collection-section">
+  <div class="collection-header">
+    <div>
+      <p class="collection-eyebrow">SIGNATURE SERIES</p>
+      <h2 class="collection-title">The Collection</h2>
+    </div>
+    <a href="guitars.html" class="collection-link">VIEW ALL →</a>
+  </div>
+  <div class="collection-grid">
+    <a class="collection-card" href="product.html?id=1">
+      <img src="images/lp-cherry.png" alt="Heritage Cherry Sunburst">
+      <div class="collection-card-info">
+        <p class="collection-card-color">Heritage Cherry Sunburst</p>
+        <p class="collection-card-price">NT$ 128,000</p>
+      </div>
+    </a>
+    <a class="collection-card" href="product.html?id=2">
+      <img src="images/lp-black.png" alt="Ebony Black">
+      <div class="collection-card-info">
+        <p class="collection-card-color">Ebony Black</p>
+        <p class="collection-card-price">NT$ 128,000</p>
+      </div>
+    </a>
+    <a class="collection-card" href="product.html?id=3">
+      <img src="images/lp-goldtop.png" alt="Vintage Goldtop">
+      <div class="collection-card-info">
+        <p class="collection-card-color">Vintage Goldtop</p>
+        <p class="collection-card-price">NT$ 135,000</p>
+      </div>
+    </a>
+    <a class="collection-card" href="product.html?id=4">
+      <img src="images/lp-tobacco.png" alt="Tobacco Burst">
+      <div class="collection-card-info">
+        <p class="collection-card-color">Tobacco Burst</p>
+        <p class="collection-card-price">NT$ 130,000</p>
+      </div>
+    </a>
+  </div>
+</div>
+
+<footer class="footer">
+  © 2026 ScreamRose Guitars. All Rights Reserved.
+</footer>
+
+</body>
+</html>

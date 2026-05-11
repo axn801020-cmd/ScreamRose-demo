@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ScreamRose | 註冊</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="header.js" defer></script>
+  <style>
+    .auth-container {
+      max-width: 440px;
+      margin: 80px auto;
+      padding: 0 20px;
+    }
+    .auth-box {
+      background: #1a1a1a;
+      border: 1px solid #2a2a2a;
+      border-radius: 12px;
+      padding: 40px;
+    }
+    .auth-logo {
+      text-align: center;
+      font-size: 22px;
+      letter-spacing: 3px;
+      color: #f1f1f1;
+      margin-bottom: 8px;
+    }
+    .auth-subtitle {
+      text-align: center;
+      font-size: 13px;
+      color: #555;
+      margin-bottom: 36px;
+    }
+    .auth-group {
+      margin-bottom: 20px;
+    }
+    .auth-group label {
+      display: block;
+      font-size: 13px;
+      color: #aaa;
+      margin-bottom: 8px;
+    }
+    .auth-group input {
+      width: 100%;
+      padding: 12px 16px;
+      background: #111;
+      border: 1px solid #333;
+      color: #f1f1f1;
+      font-size: 15px;
+      border-radius: 6px;
+      outline: none;
+      box-sizing: border-box;
+      transition: border-color 0.2s;
+    }
+    .auth-group input:focus { border-color: #c9a44c; }
+    .auth-group input::placeholder { color: #444; }
+    .input-hint {
+      font-size: 12px;
+      color: #555;
+      margin-top: 6px;
+    }
+    .auth-btn {
+      width: 100%;
+      padding: 14px;
+      margin-top: 8px;
+      font-size: 15px;
+      background: #b30000;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      letter-spacing: 1px;
+      transition: background 0.2s;
+    }
+    .auth-btn:hover { background: #ff1a1a; }
+    .auth-divider {
+      text-align: center;
+      color: #444;
+      font-size: 13px;
+      margin: 24px 0;
+      position: relative;
+    }
+    .auth-divider::before,
+    .auth-divider::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      width: 42%;
+      height: 1px;
+      background: #2a2a2a;
+    }
+    .auth-divider::before { left: 0; }
+    .auth-divider::after { right: 0; }
+    .auth-link {
+      text-align: center;
+      font-size: 14px;
+      color: #666;
+    }
+    .auth-link a {
+      color: #c9a44c;
+      text-decoration: none;
+    }
+    .auth-link a:hover { text-decoration: underline; }
+    .error-msg {
+      background: #2a0000;
+      border: 1px solid #5a0000;
+      color: #ff6b6b;
+      font-size: 13px;
+      padding: 10px 14px;
+      border-radius: 6px;
+      margin-bottom: 20px;
+      display: none;
+    }
+    .success-msg {
+      background: #002a00;
+      border: 1px solid #005a00;
+      color: #6bff6b;
+      font-size: 13px;
+      padding: 10px 14px;
+      border-radius: 6px;
+      margin-bottom: 20px;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+<header class="top-bar">
+  <a href="index.html" class="brand" style="text-decoration:none; color:inherit;">ScreamRose</a>
+  <nav>
+    <a href="index.html">← 回到首頁</a>
+  </nav>
+  <div class="cart">
+	<span id="auth-area"></span>
+	  &nbsp;&nbsp;🛒 <span id="cart-count">0</span>
+  </div>
+</header>
+
+<div class="auth-container">
+  <div class="auth-box">
+    <p class="auth-logo">ScreamRose</p>
+    <p class="auth-subtitle">建立新帳號</p>
+
+    <div class="error-msg" id="error-msg"></div>
+    <div class="success-msg" id="success-msg"></div>
+
+    <div class="auth-group">
+      <label for="name">姓名</label>
+      <input type="text" id="name" placeholder="請輸入姓名">
+    </div>
+
+    <div class="auth-group">
+      <label for="email">Email</label>
+      <input type="email" id="email" placeholder="請輸入 Email">
+    </div>
+
+    <div class="auth-group">
+      <label for="password">密碼</label>
+      <input type="password" id="password" placeholder="請設定密碼（至少 8 位）">
+      <p class="input-hint">至少 8 個字元，建議包含英文與數字</p>
+    </div>
+
+    <div class="auth-group">
+      <label for="confirm-password">確認密碼</label>
+      <input type="password" id="confirm-password" placeholder="請再次輸入密碼">
+    </div>
+
+    <button class="auth-btn" onclick="handleRegister()">註冊</button>
+
+    <div class="auth-divider">或</div>
+
+    <div class="auth-link">
+      已有帳號？<a href="login.html">立即登入</a>
+    </div>
+  </div>
+</div>
+
+<script>
+  const cart = JSON.parse(localStorage.getItem("cart")) || [];
+  document.getElementById("cart-count").textContent = cart.reduce((s, i) => s + (i.qty || 0), 0);
+
+  function handleRegister() {
+    const name = document.getElementById("name").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value.trim();
+    const confirm = document.getElementById("confirm-password").value.trim();
+    const errorEl = document.getElementById("error-msg");
+    const successEl = document.getElementById("success-msg");
+
+    errorEl.style.display = "none";
+    successEl.style.display = "none";
+
+    if (!name || !email || !password || !confirm) {
+      errorEl.textContent = "請填寫所有欄位！";
+      errorEl.style.display = "block";
+      return;
+    }
+    if (password.length < 8) {
+      errorEl.textContent = "密碼至少需要 8 個字元！";
+      errorEl.style.display = "block";
+      return;
+    }
+    if (password !== confirm) {
+      errorEl.textContent = "兩次密碼輸入不一致，請確認！";
+      errorEl.style.display = "block";
+      return;
+    }
+
+    // 之後接 Spring Boot API：POST /api/register
+    fetch("/api/register", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name, email, password })
+    })
+	.then(async res => {
+	  const text = await res.text();
+	  if (res.ok) {
+	    successEl.textContent = "註冊成功！3 秒後跳轉至登入頁...";
+	    successEl.style.display = "block";
+	    setTimeout(() => window.location.href = "Login.html", 3000);
+	  } else {
+	    errorEl.textContent = text || "註冊失敗，請稍後再試。";
+	    errorEl.style.display = "block";
+	  }
+	})
+	.catch(() => {
+	  errorEl.textContent = "連線失敗，請確認後端是否啟動。";
+	  errorEl.style.display = "block";
+	});
+  }
+
+  document.addEventListener("keydown", function(e) {
+    if (e.key === "Enter") handleRegister();
+  });
+</script>
+
+</body>
+</html>

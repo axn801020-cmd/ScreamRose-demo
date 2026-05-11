@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ScreamRose | 結帳</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="cart.css">
+  <script src="header.js" defer></script>
+</head>
+<body>
+
+  <header class="site-header">
+	<h1>ScreamRose Guitars</h1>
+	 <div style="display:flex; align-items:center; gap:16px;">
+	   <span id="auth-area"></span>
+	   <a href="index.html" class="back-link">← 繼續購物</a>
+  </header>
+
+  <main>
+    <section class="cart-container">
+
+      <div class="steps">
+        <div class="step active" id="step-indicator-1">① 確認訂單</div>
+        <div class="step-arrow">→</div>
+        <div class="step" id="step-indicator-2">② 付款方式</div>
+        <div class="step-arrow">→</div>
+        <div class="step" id="step-indicator-3">③ 完成</div>
+      </div>
+
+      <!-- Step 1 -->
+      <div id="step-1">
+        <h2>確認訂單</h2>
+        <div id="cart-list"></div>
+        <div class="cart-total">
+          <span>總金額</span>
+          <span id="total-price">NT$ 0</span>
+        </div>
+        <div class="checkout-form">
+          <h3>收件資訊</h3>
+          <div class="form-group">
+            <label for="name">姓名</label>
+            <input type="text" id="name" placeholder="請輸入姓名">
+          </div>
+          <div class="form-group">
+            <label for="phone">電話</label>
+            <input type="tel" id="phone" placeholder="請輸入電話">
+          </div>
+          <div class="form-group">
+            <label for="address">地址</label>
+            <input type="text" id="address" placeholder="請輸入收件地址">
+          </div>
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" placeholder="請輸入 Email">
+          </div>
+          <button class="confirm-btn" onclick="goToPayment()">下一步：選擇付款方式</button>
+        </div>
+        <p class="shipping">✓ 全台免運　✓ 原廠硬盒　✓ 2年保固</p>
+      </div>
+
+      <!-- Step 2 -->
+      <div id="step-2" style="display:none;">
+        <h2>選擇付款方式</h2>
+
+        <div class="payment-options">
+
+          <!-- 信用卡 -->
+          <label class="payment-option">
+            <input type="radio" name="payment" value="credit" onchange="showPaymentDetail('credit')">
+            <div class="payment-card">
+              <span class="payment-icon">💳</span>
+              <div>
+                <p class="payment-title">信用卡付款</p>
+                <p class="payment-sub">Visa / Mastercard / JCB</p>
+              </div>
+            </div>
+          </label>
+          <div class="payment-detail" id="detail-credit">
+            <div class="form-group">
+              <label>卡號</label>
+              <input type="text" id="card-number" placeholder="1234 5678 9012 3456" maxlength="19" oninput="formatCardNumber(this)">
+            </div>
+            <div style="display:flex; gap:12px;">
+              <div class="form-group" style="flex:1;">
+                <label>有效期限</label>
+                <input type="text" id="card-expiry" placeholder="MM / YY" maxlength="7" oninput="formatExpiry(this)">
+              </div>
+              <div class="form-group" style="flex:1;">
+                <label>CVV</label>
+                <input type="text" id="card-cvv" placeholder="123" maxlength="3">
+              </div>
+            </div>
+            <div class="form-group">
+              <label>持卡人姓名</label>
+              <input type="text" id="card-name" placeholder="與信用卡上相同">
+            </div>
+          </div>
+
+          <!-- ATM 轉帳 -->
+          <label class="payment-option">
+            <input type="radio" name="payment" value="transfer" onchange="showPaymentDetail('transfer')">
+            <div class="payment-card">
+              <span class="payment-icon">🏦</span>
+              <div>
+                <p class="payment-title">ATM 轉帳</p>
+                <p class="payment-sub">選擇銀行，下單後產生虛擬帳號</p>
+              </div>
+            </div>
+          </label>
+          <div class="payment-detail" id="detail-transfer">
+            <div class="form-group">
+              <label>選擇銀行</label>
+              <select id="bank-select" style="flex:1; padding:12px 16px; background:#1a1a1a; border:1px solid #333; color:#f1f1f1; font-size:15px; border-radius:4px;">
+                <option value="">── 請選擇銀行 ──</option>
+                <option value="004">004 臺灣銀行</option>
+                <option value="005">005 土地銀行</option>
+                <option value="006">006 合作金庫</option>
+                <option value="007">007 第一銀行</option>
+                <option value="008">008 華南銀行</option>
+                <option value="009">009 彰化銀行</option>
+                <option value="011">011 上海商銀</option>
+                <option value="013">013 國泰世華</option>
+                <option value="017">017 兆豐銀行</option>
+                <option value="021">021 花旗銀行</option>
+                <option value="050">050 臺灣中小企銀</option>
+                <option value="052">052 渣打銀行</option>
+                <option value="081">081 匯豐銀行</option>
+                <option value="103">103 新光銀行</option>
+                <option value="108">108 陽信銀行</option>
+                <option value="147">147 三信銀行</option>
+                <option value="700">700 中華郵政</option>
+                <option value="803">803 聯邦銀行</option>
+                <option value="806">806 元大銀行</option>
+                <option value="807">807 永豐銀行</option>
+                <option value="808">808 玉山銀行</option>
+                <option value="809">809 凱基銀行</option>
+                <option value="812">812 台新銀行</option>
+                <option value="816">816 安泰銀行</option>
+                <option value="822">822 中國信託</option>
+                <option value="824">824 永豐商銀</option>
+              </select>
+            </div>
+            <div class="atm-info">
+              <p class="atm-note">⚠ 請於 3 天內完成轉帳，逾期訂單將自動取消</p>
+              <p class="atm-note" style="color:#777; margin-top:6px;">虛擬帳號將於確認下單後產生</p>
+            </div>
+          </div>
+
+          <!-- 融資分期付款 -->
+          <label class="payment-option">
+            <input type="radio" name="payment" value="installment" onchange="showPaymentDetail('installment'); calcInstallment()">
+            <div class="payment-card">
+              <span class="payment-icon">📋</span>
+              <div>
+                <p class="payment-title">融資分期付款</p>
+                <p class="payment-sub">3 / 6 / 12 / 24 期，部分銀行免手續費</p>
+              </div>
+            </div>
+          </label>
+          <div class="payment-detail" id="detail-installment">
+            <div class="form-group">
+              <label>分期期數</label>
+              <select id="installment-months" onchange="calcInstallment()" style="flex:1; padding:12px 16px; background:#1a1a1a; border:1px solid #333; color:#f1f1f1; font-size:15px; border-radius:4px;">
+                <option value="3">3 期（手續費 0%）</option>
+                <option value="6">6 期（手續費 0%）</option>
+                <option value="12">12 期（手續費 1.5%）</option>
+                <option value="24">24 期（手續費 3%）</option>
+              </select>
+            </div>
+            <div class="installment-summary" id="installment-summary">
+              <div class="installment-row">
+                <span>每期金額</span>
+                <span id="monthly-amount" style="color:#c9a44c; font-size:20px;">──</span>
+              </div>
+              <div class="installment-row">
+                <span>手續費</span>
+                <span id="fee-amount">──</span>
+              </div>
+              <div class="installment-row">
+                <span>總付款金額</span>
+                <span id="total-installment-amount" style="color:#f1f1f1;">──</span>
+              </div>
+            </div>
+            <div class="form-group" style="margin-top:16px;">
+              <label>信用卡卡號</label>
+              <input type="text" id="inst-card-number" placeholder="1234 5678 9012 3456" maxlength="19" oninput="formatCardNumber(this)">
+            </div>
+            <div style="display:flex; gap:12px;">
+              <div class="form-group" style="flex:1;">
+                <label>有效期限</label>
+                <input type="text" id="inst-card-expiry" placeholder="MM / YY" maxlength="7" oninput="formatExpiry(this)">
+              </div>
+              <div class="form-group" style="flex:1;">
+                <label>CVV</label>
+                <input type="text" id="inst-card-cvv" placeholder="123" maxlength="3">
+              </div>
+            </div>
+            <p class="atm-note" style="margin-top:8px;">⚠ 分期申請需由銀行審核，實際期數以銀行核准為準</p>
+          </div>
+
+        </div>
+
+        <div class="cart-total" style="margin-top:30px;">
+          <span>總金額</span>
+          <span id="total-price-2">NT$ 0</span>
+        </div>
+        <div style="display:flex; gap:12px; margin-top:20px;">
+          <button class="back-btn" onclick="goBack()">← 返回</button>
+          <button class="confirm-btn" onclick="confirmPayment()" style="flex:1;">確認付款</button>
+        </div>
+      </div>
+
+      <!-- Step 3 -->
+      <div id="step-3" style="display:none; text-align:center; padding:60px 0;">
+        <div style="font-size:60px; margin-bottom:20px;">🎸</div>
+        <h2 style="font-size:28px; margin-bottom:12px;">訂單已成立！</h2>
+        <p style="color:#aaa; margin-bottom:24px;">感謝您的購買，訂單資訊已寄送至您的 Email。</p>
+        <div id="order-summary" class="order-summary"></div>
+        <button class="confirm-btn" onclick="window.location.href='index.html'" style="max-width:300px; margin:30px auto 0; display:block;">
+          回到首頁
+        </button>
+      </div>
+
+    </section>
+  </main>
+
+  <script src="cart.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      renderCart();
+      const total = document.getElementById("total-price").textContent;
+      document.getElementById("total-price-2").textContent = total;
+    });
+
+    function showPaymentDetail(type) {
+      document.querySelectorAll(".payment-detail").forEach(d => d.style.display = "none");
+      document.getElementById("detail-" + type).style.display = "block";
+    }
+
+    
+	  function goToPayment() {
+	    const token = localStorage.getItem("token");
+	    if (!token) {
+	      alert("請先登入才能結帳！");
+	      window.location.href = "Login.html";
+	      return;
+	    }
+	    const name = document.getElementById("name").value.trim();
+      const phone = document.getElementById("phone").value.trim();
+      const address = document.getElementById("address").value.trim();
+      const email = document.getElementById("email").value.trim();
+      if (getCart().length === 0) { alert("購物車是空的！"); return; }
+      if (!name || !phone || !address || !email) { alert("請填寫完整的收件資訊！"); return; }
+      document.getElementById("step-1").style.display = "none";
+      document.getElementById("step-2").style.display = "block";
+      document.getElementById("step-indicator-1").classList.remove("active");
+      document.getElementById("step-indicator-2").classList.add("active");
+    }
+
+    function goBack() {
+      document.getElementById("step-2").style.display = "none";
+      document.getElementById("step-1").style.display = "block";
+      document.getElementById("step-indicator-2").classList.remove("active");
+      document.getElementById("step-indicator-1").classList.add("active");
+    }
+
+    function formatCardNumber(input) {
+      let v = input.value.replace(/\D/g, "").substring(0, 16);
+      input.value = v.replace(/(.{4})/g, "$1 ").trim();
+    }
+
+    function formatExpiry(input) {
+      let v = input.value.replace(/\D/g, "").substring(0, 4);
+      if (v.length >= 2) v = v.substring(0, 2) + " / " + v.substring(2);
+      input.value = v;
+    }
+
+    function generateCode(length) {
+      let code = "";
+      for (let i = 0; i < length; i++) code += Math.floor(Math.random() * 10);
+      return code;
+    }
+
+    function deadlineDate() {
+      const d = new Date();
+      d.setDate(d.getDate() + 3);
+      return d.getFullYear() + "/" + String(d.getMonth()+1).padStart(2,"0") + "/" + String(d.getDate()).padStart(2,"0") + " 23:59";
+    }
+
+    function getTotalAmount() {
+      const text = document.getElementById("total-price-2").textContent;
+      return parseInt(text.replace(/[^0-9]/g, "")) || 0;
+    }
+
+    // 分期金額計算
+    function calcInstallment() {
+      const months = parseInt(document.getElementById("installment-months").value);
+      const total = getTotalAmount();
+      const feeRates = { 3: 0, 6: 0, 12: 0.015, 24: 0.03 };
+      const rate = feeRates[months] || 0;
+      const fee = Math.round(total * rate);
+      const totalWithFee = total + fee;
+      const monthly = Math.ceil(totalWithFee / months);
+
+      document.getElementById("monthly-amount").textContent = "NT$ " + monthly.toLocaleString() + " × " + months + " 期";
+      document.getElementById("fee-amount").textContent = rate === 0 ? "免手續費" : "NT$ " + fee.toLocaleString();
+      document.getElementById("total-installment-amount").textContent = "NT$ " + totalWithFee.toLocaleString();
+    }
+
+    function confirmPayment() {
+      const selected = document.querySelector("input[name='payment']:checked");
+      if (!selected) { alert("請選擇付款方式！"); return; }
+
+      const type = selected.value;
+      const total = document.getElementById("total-price-2").textContent;
+      let summaryHTML = "";
+      const deadline = deadlineDate();
+
+      if (type === "credit") {
+        const num = document.getElementById("card-number").value.trim();
+        const exp = document.getElementById("card-expiry").value.trim();
+        const cvv = document.getElementById("card-cvv").value.trim();
+        const cname = document.getElementById("card-name").value.trim();
+        if (!num || !exp || !cvv || !cname) { alert("請填寫完整的信用卡資訊！"); return; }
+        const last4 = num.replace(/\s/g, "").slice(-4);
+        summaryHTML = `
+          <p class="summary-row">付款方式<span>信用卡（末四碼 ${last4}）</span></p>
+          <p class="summary-row">付款狀態<span style="color:#4caf50;">✓ 付款成功</span></p>
+          <p class="summary-row">訂單金額<span>${total}</span></p>`;
+
+      } else if (type === "transfer") {
+        const bankSelect = document.getElementById("bank-select");
+        const bankCode = bankSelect.value;
+        const bankName = bankSelect.options[bankSelect.selectedIndex].text;
+        if (!bankCode) { alert("請選擇銀行！"); return; }
+        const account = bankCode + generateCode(14 - bankCode.length);
+        summaryHTML = `
+          <p class="summary-row">付款方式<span>ATM 轉帳</span></p>
+          <p class="summary-row">銀行<span>${bankName}</span></p>
+          <p class="summary-row">虛擬帳號<span style="color:#c9a44c; font-size:18px; letter-spacing:2px;">${account}</span></p>
+          <p class="summary-row">轉帳金額<span>${total}</span></p>
+          <p class="summary-row">繳費期限<span style="color:#ff6b6b;">${deadline}</span></p>`;
+
+      } else if (type === "installment") {
+        const num = document.getElementById("inst-card-number").value.trim();
+        const exp = document.getElementById("inst-card-expiry").value.trim();
+        const cvv = document.getElementById("inst-card-cvv").value.trim();
+        if (!num || !exp || !cvv) { alert("請填寫完整的信用卡資訊！"); return; }
+        const last4 = num.replace(/\s/g, "").slice(-4);
+        const months = document.getElementById("installment-months").value;
+        const monthly = document.getElementById("monthly-amount").textContent;
+        const totalInst = document.getElementById("total-installment-amount").textContent;
+        summaryHTML = `
+          <p class="summary-row">付款方式<span>融資分期付款</span></p>
+          <p class="summary-row">信用卡末四碼<span>${last4}</span></p>
+          <p class="summary-row">分期期數<span>${months} 期</span></p>
+          <p class="summary-row">每期金額<span style="color:#c9a44c;">${monthly}</span></p>
+          <p class="summary-row">總付款金額<span>${totalInst}</span></p>
+          <p class="summary-row">申請狀態<span style="color:#ffa500;">⏳ 審核中</span></p>`;
+      }
+
+	  const token = localStorage.getItem("token");
+	        const cart = JSON.parse(localStorage.getItem("cart")) || [];
+	        const totalAmount = parseInt(total.replace(/[^0-9]/g, "")) || 0;
+
+	        const orderPromises = cart.map(item =>
+	          fetch("/api/orders", {
+	            method: "POST",
+	            headers: {
+	              "Content-Type": "application/json",
+	              "Authorization": "Bearer " + token
+	            },
+	            body: JSON.stringify({
+	              productName: item.name || "商品",
+	              quantity: item.qty || 1,
+	              price: item.price || 0
+	            })
+	          })
+	        );
+
+	        Promise.all(orderPromises)
+	          .catch(() => console.log("訂單寫入失敗"))
+	          .finally(() => {
+	            document.getElementById("step-2").style.display = "none";
+	            document.getElementById("step-3").style.display = "block";
+	            document.getElementById("step-indicator-2").classList.remove("active");
+	            document.getElementById("step-indicator-3").classList.add("active");
+	            document.getElementById("order-summary").innerHTML = summaryHTML;
+	            localStorage.removeItem("cart");
+	          });
+    }
+  </script>
+
+</body>
+</html>

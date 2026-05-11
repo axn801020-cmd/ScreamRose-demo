@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ScreamRose | 新增商品</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body { background: #0a0a0a; color: #f1f1f1; font-family: sans-serif; margin: 0; }
+
+    .add-wrap {
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 48px 24px 80px;
+    }
+
+    /* 麵包屑導覽 */
+    .breadcrumb {
+      font-size: 13px;
+      color: #444;
+      margin-bottom: 28px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .breadcrumb a { color: #666; text-decoration: none; transition: color 0.2s; }
+    .breadcrumb a:hover { color: #f1f1f1; }
+    .breadcrumb span { color: #b30000; }
+
+    /* 頁面標題區 */
+    .page-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 36px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid #1e1e1e;
+    }
+    .page-header h1 {
+      font-size: 24px;
+      letter-spacing: 3px;
+      margin: 0;
+    }
+    .btn-back {
+      padding: 8px 20px;
+      background: transparent;
+      border: 1px solid #333;
+      color: #888;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 13px;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+    .btn-back:hover { border-color: #555; color: #f1f1f1; }
+
+    /* ── 表單卡片 ── */
+    .form-card {
+      background: #0e0e0e;
+      border: 1px solid #1e1e1e;
+      border-radius: 12px;
+      padding: 32px;
+      margin-bottom: 20px;
+    }
+    .form-card h2 {
+      font-size: 13px;
+      color: #555;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin: 0 0 20px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid #1a1a1a;
+    }
+
+    /* 表單格線 */
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+    .form-grid .full { grid-column: span 2; }
+
+    /* 輸入框共用樣式 */
+    .form-grid input,
+    .form-grid textarea,
+    .form-grid select {
+      background: #111;
+      border: 1px solid #252525;
+      color: #f1f1f1;
+      padding: 11px 14px;
+      border-radius: 7px;
+      font-size: 14px;
+      width: 100%;
+      box-sizing: border-box;
+      outline: none;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .form-grid input:focus,
+    .form-grid textarea:focus,
+    .form-grid select:focus {
+      border-color: #b30000;
+      background: #131313;
+    }
+    .form-grid textarea {
+      height: 100px;
+      resize: vertical;
+      font-family: inherit;
+    }
+    .form-grid select option { background: #111; }
+
+    /* 輸入框標籤 */
+    .field-wrap { display: flex; flex-direction: column; gap: 6px; }
+    .field-label { font-size: 12px; color: #555; letter-spacing: 1px; }
+    .field-label em { color: #b30000; font-style: normal; } /* 必填星號 */
+
+    /* ── 圖片上傳區 ── */
+    .image-upload-area {
+      border: 2px dashed #252525;
+      border-radius: 8px;
+      padding: 24px;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+      position: relative;
+    }
+    .image-upload-area:hover { border-color: #555; background: #111; }
+    .image-upload-area.has-image { border-style: solid; border-color: #333; }
+    .image-upload-area input[type="file"] {
+      position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%;
+    }
+    .upload-icon { font-size: 32px; margin-bottom: 8px; }
+    .upload-hint { font-size: 13px; color: #555; }
+    .upload-hint strong { color: #888; }
+    #upload-preview {
+      width: 100%; max-height: 200px; object-fit: contain;
+      border-radius: 6px; display: none; margin-top: 12px;
+    }
+    #upload-filename {
+      font-size: 12px; color: #c9a44c; margin-top: 8px; display: none;
+    }
+    #upload-loading { font-size: 13px; color: #c9a44c; display: none; margin-top: 8px; }
+
+    /* ── 底部按鈕列 ── */
+    .action-bar {
+      display: flex;
+      gap: 12px;
+      justify-content: flex-end;
+      padding-top: 8px;
+    }
+    .btn-cancel {
+      padding: 11px 28px;
+      background: transparent;
+      border: 1px solid #333;
+      color: #888;
+      border-radius: 7px;
+      cursor: pointer;
+      font-size: 14px;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+    .btn-cancel:hover { border-color: #555; color: #f1f1f1; }
+    .btn-submit {
+      padding: 11px 36px;
+      background: #b30000;
+      color: #fff;
+      border: none;
+      border-radius: 7px;
+      cursor: pointer;
+      font-size: 14px;
+      letter-spacing: 1px;
+      transition: background 0.2s;
+    }
+    .btn-submit:hover { background: #cc0000; }
+    .btn-submit:disabled { background: #4a0000; cursor: not-allowed; }
+
+    /* 成功 / 錯誤提示 */
+    .msg-box {
+      padding: 12px 18px;
+      border-radius: 7px;
+      font-size: 14px;
+      margin-bottom: 20px;
+      display: none;
+    }
+    .msg-success { background: #0a2a0a; border: 1px solid #1a4a1a; color: #4caf50; display: block; }
+    .msg-error   { background: #2a0a0a; border: 1px solid #4a1a1a; color: #ef5350; display: block; }
+  </style>
+</head>
+<body>
+
+<header class="top-bar">
+  <a href="index.html" class="brand" style="text-decoration:none;color:inherit;">ScreamRose</a>
+  <nav>
+    <a href="guitars.html">Guitars</a>
+    <a href="artists.html">Artists</a>
+    <a href="support.html">Support</a>
+  </nav>
+  <div class="cart">
+    <span id="auth-area"></span>
+  </div>
+</header>
+
+<div class="add-wrap">
+
+  <!-- 麵包屑 -->
+  <div class="breadcrumb">
+    <a href="admin.html">後台管理</a>
+    ›
+    <span>新增商品</span>
+  </div>
+
+  <!-- 頁面標題 -->
+  <div class="page-header">
+    <h1>＋ 新增商品</h1>
+    <a href="admin.html" class="btn-back">← 返回列表</a>
+  </div>
+
+  <!-- 訊息區 -->
+  <div id="msg-box" class="msg-box"></div>
+
+  <!-- ── 卡片一：基本資料 ── -->
+  <div class="form-card">
+    <h2>基本資料</h2>
+    <div class="form-grid">
+
+      <div class="field-wrap">
+        <label class="field-label">商品名稱 <em>*</em></label>
+        <input id="f-name" placeholder="例：ScreamRose Les Paul" />
+      </div>
+
+      <div class="field-wrap">
+        <label class="field-label">價格（NT$）<em>*</em></label>
+        <input id="f-price" type="number" placeholder="例：128000" min="0" />
+      </div>
+
+      <div class="field-wrap">
+        <label class="field-label">系列 <em>*</em></label>
+        <!-- 直接用下拉選單，不用自己打 -->
+		
+		<!-- datalist：可以從下拉選，也可以自己打新的 -->
+		<input id="f-series" 
+		       list="series-list" 
+		       placeholder="選擇或輸入新系列…" 
+		       autocomplete="off" />
+		<datalist id="series-list">
+		  <!-- 選項由 loadSeriesOptions() 動態填入 -->
+		</datalist>
+		
+      </div>
+
+      <div class="field-wrap">
+        <label class="field-label">顏色 <em>*</em></label>
+        <input id="f-color" placeholder="例：Heritage Cherry Sunburst" />
+      </div>
+
+      <div class="field-wrap">
+        <label class="field-label">庫存數量 <em>*</em></label>
+        <input id="f-stock" type="number" placeholder="例：5" min="0" />
+      </div>
+
+      <div class="field-wrap">
+        <!-- 保留空格，對齊排版 -->
+      </div>
+
+      <div class="field-wrap full">
+        <label class="field-label">商品描述</label>
+        <textarea id="f-desc" placeholder="輸入商品詳細描述…"></textarea>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── 卡片二：商品圖片 ── -->
+  <div class="form-card">
+    <h2>商品主圖</h2>
+
+    <div class="image-upload-area" id="upload-area">
+      <!-- 隱藏的真實 file input -->
+      <input type="file" accept="image/*"
+             onchange="handleImageUpload(this)" />
+      <div id="upload-placeholder">
+        <div class="upload-icon">🖼</div>
+        <div class="upload-hint">點擊或拖曳圖片到這裡<br><strong>支援 JPG、PNG、WebP</strong></div>
+      </div>
+      <img id="upload-preview" alt="預覽" />
+      <div id="upload-filename"></div>
+      <div id="upload-loading">⏳ 上傳中…</div>
+    </div>
+	
+	<!-- ── 卡片三：角度照片 ── -->
+	<div class="form-card">
+	  <h2>角度照片</h2>
+	  <p style="font-size:13px;color:#555;margin:0 0 16px;">
+	    可上傳多張不同角度的照片（例：琴頭、琴身、琴背、正面）
+	  </p>
+
+	  <!-- 已上傳的角度照片預覽區 -->
+	  <div id="angle-grid" style="
+	    display: grid;
+	    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+	    gap: 12px;
+	    margin-bottom: 16px;
+	  "></div>
+
+	  <!-- 加入角度照片按鈕 -->
+	  <label style="
+	    display: inline-flex; align-items: center; gap: 8px;
+	    padding: 10px 20px; background: #111; border: 1px dashed #333;
+	    border-radius: 7px; cursor: pointer; font-size: 13px; color: #888;
+	    transition: all 0.2s;
+	  " onmouseover="this.style.borderColor='#555';this.style.color='#fff'"
+	     onmouseout="this.style.borderColor='#333';this.style.color='#888'">
+	    ＋ 新增角度照片
+	    <input type="file" accept="image/*" multiple
+	           style="display:none" onchange="handleAngleUpload(this)" />
+	  </label>
+	  <span id="angle-loading" style="font-size:12px;color:#c9a44c;margin-left:12px;display:none;">
+	    ⏳ 上傳中…
+	  </span>
+	</div>
+
+    <!-- 圖片路徑（後端回傳後自動填入，唯讀） -->
+    <input type="hidden" id="f-image" />
+  </div>
+
+  <!-- ── 卡片四：試聽音檔 ── -->
+  <div class="form-card">
+    <h2>試聽音檔</h2>
+    <p style="font-size:13px;color:#555;margin:0 0 16px;">
+      上傳一段音檔供客戶試聽（支援 MP3、WAV，建議 30 秒以內）
+    </p>
+
+    <div id="audio-upload-area" style="
+      border: 2px dashed #252525; border-radius: 8px;
+      padding: 24px; text-align: center; position: relative;
+      transition: all 0.2s; cursor: pointer;
+    " onmouseover="this.style.borderColor='#555'"
+       onmouseout="this.style.borderColor='#252525'">
+      <input type="file" accept=".mp3,.wav,audio/*"
+             style="position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;"
+             onchange="handleAudioUpload(this)" />
+      <div id="audio-placeholder">
+        <div style="font-size:32px;margin-bottom:8px;">🎵</div>
+        <div style="font-size:13px;color:#555;">
+          點擊上傳音檔<br>
+          <strong style="color:#888;">支援 MP3、WAV</strong>
+        </div>
+      </div>
+      <div id="audio-result" style="display:none;">
+        <audio id="audio-player" controls style="width:100%;margin-bottom:8px;"></audio>
+        <div id="audio-filename" style="font-size:12px;color:#c9a44c;"></div>
+        <div style="font-size:12px;color:#444;margin-top:6px;">點擊此區域可重新上傳</div>
+      </div>
+      <div id="audio-loading" style="display:none;font-size:13px;color:#c9a44c;margin-top:8px;">
+        ⏳ 上傳中…
+      </div>
+    </div>
+
+    <input type="hidden" id="f-audio" />
+  </div>
+  <!-- ── 底部操作按鈕 ── -->
+  <div class="action-bar">
+    <a href="admin.html" class="btn-cancel">取消</a>
+    <button class="btn-submit" id="btn-submit" onclick="createProduct()">儲存商品</button>
+  </div>
+
+</div>
+
+<script src="header.js" defer></script>
+<script>
+  /* ── JWT 驗證，非 ADMIN 踢出 ── */
+  const token = localStorage.getItem("token");
+  const role  = localStorage.getItem("role");
+  if (!token || role !== "ADMIN") {
+    alert("⚠ 請先以 ADMIN 身份登入！");
+    location.href = "Login.html";
+  }
+
+  const API = "http://localhost:8080";
+  
+  // 暫存角度照片清單（存放後端回傳的 URL）
+  let angleImages = [];
+
+  /* ════ 角度照片上傳 ════ */
+  function handleAngleUpload(input) {
+    const files = Array.from(input.files);
+    if (!files.length) return;
+
+    document.getElementById("angle-loading").style.display = "inline";
+
+    // 逐一上傳每張照片
+    const uploadPromises = files.map(file => {
+      const formData = new FormData();
+      formData.append("file", file);
+      return fetch(API + "/api/admin/upload", {
+        method: "POST",
+        headers: { "Authorization": "Bearer " + token },
+        body: formData
+      })
+      .then(r => r.json())
+      .then(data => {
+        if (data.imageUrl) {
+          // 加入暫存清單
+          angleImages.push({ url: data.imageUrl, sortOrder: angleImages.length });
+          renderAngleGrid(); // 更新畫面
+        }
+      });
+    });
+
+    // 全部上傳完成後隱藏loading
+    Promise.all(uploadPromises).then(() => {
+      document.getElementById("angle-loading").style.display = "none";
+      input.value = ""; // 清空 input，讓同一張圖可以重複選
+    });
+  }
+
+  /* ════ 渲染角度照片預覽格 ════ */
+  function renderAngleGrid() {
+    const grid = document.getElementById("angle-grid");
+    grid.innerHTML = angleImages.map((img, index) => `
+      <div style="position:relative;border-radius:8px;overflow:hidden;border:1px solid #222;">
+        <img src="${img.url}" style="width:100%;height:120px;object-fit:cover;display:block;" />
+        <!-- 排序標籤 -->
+        <div style="
+          position:absolute;bottom:0;left:0;right:0;
+          background:rgba(0,0,0,0.7);padding:4px 8px;
+          font-size:11px;color:#aaa;display:flex;justify-content:space-between;align-items:center;
+        ">
+          <span>第 ${index + 1} 張</span>
+          <!-- 刪除按鈕 -->
+          <button onclick="removeAngleImage(${index})" style="
+            background:transparent;border:none;color:#b30000;
+            cursor:pointer;font-size:14px;padding:0;line-height:1;
+          ">✕</button>
+        </div>
+      </div>
+    `).join("");
+  }
+
+  /* ════ 移除角度照片 ════ */
+  function removeAngleImage(index) {
+    angleImages.splice(index, 1);
+    // 重新排序
+    angleImages.forEach((img, i) => img.sortOrder = i);
+    renderAngleGrid();
+  }
+  
+  /* ════ 音檔上傳 ════ */
+  function handleAudioUpload(input) {
+    const file = input.files[0];
+    if (!file) return;
+
+    document.getElementById("audio-loading").style.display = "block";
+    document.getElementById("audio-placeholder").style.display = "none";
+
+    const formData = new FormData();
+    formData.append("file", file);
+
+    fetch(API + "/api/admin/upload-audio", {
+      method: "POST",
+      headers: { "Authorization": "Bearer " + token },
+      body: formData
+    })
+    .then(r => r.json())
+    .then(data => {
+      document.getElementById("audio-loading").style.display = "none";
+      if (data.error) {
+        showMsg("❌ 音檔上傳失敗：" + data.error, "error");
+        document.getElementById("audio-placeholder").style.display = "block";
+        return;
+      }
+      document.getElementById("f-audio").value = data.audioUrl;
+      const player = document.getElementById("audio-player");
+      player.src = "/" + data.audioUrl;
+      document.getElementById("audio-filename").textContent = "✅ " + data.audioUrl;
+      document.getElementById("audio-result").style.display = "block";
+    })
+    .catch(err => {
+      document.getElementById("audio-loading").style.display = "none";
+      document.getElementById("audio-placeholder").style.display = "block";
+      showMsg("❌ 上傳失敗：" + err, "error");
+    });
+  }
+
+  /* ════ 圖片上傳 ════ */
+  function handleImageUpload(input) {
+    const file = input.files[0];
+    if (!file) return;
+
+    // 顯示本地預覽（不等 API 回傳，體驗更好）
+    const reader = new FileReader();
+    reader.onload = e => {
+      const preview = document.getElementById("upload-preview");
+      preview.src = e.target.result;
+      preview.style.display = "block";
+      document.getElementById("upload-placeholder").style.display = "none";
+      document.getElementById("upload-area").classList.add("has-image");
+    };
+    reader.readAsDataURL(file);
+
+    // 實際上傳到後端
+    document.getElementById("upload-loading").style.display = "block";
+    document.getElementById("upload-filename").style.display = "none";
+
+    const formData = new FormData();
+    formData.append("file", file);
+
+    fetch(API + "/api/admin/upload", {
+      method: "POST",
+      headers: { "Authorization": "Bearer " + token },
+      body: formData
+    })
+    .then(r => r.json())
+    .then(data => {
+      document.getElementById("upload-loading").style.display = "none";
+      if (data.error) {
+        showMsg("❌ 圖片上傳失敗：" + data.error, "error");
+        return;
+      }
+      // 儲存後端回傳的路徑
+      document.getElementById("f-image").value = data.imageUrl;
+      const fname = document.getElementById("upload-filename");
+      fname.textContent = "✅ " + data.imageUrl;
+      fname.style.display = "block";
+    })
+    .catch(err => {
+      document.getElementById("upload-loading").style.display = "none";
+      showMsg("❌ 上傳失敗：" + err, "error");
+    });
+  }
+
+  /* ════ 新增商品 ════ */
+  function createProduct() {
+    // ── 基本驗證 ──
+    const name   = document.getElementById("f-name").value.trim();
+    const price  = document.getElementById("f-price").value;
+    const series = document.getElementById("f-series").value;
+    const color  = document.getElementById("f-color").value.trim();
+    const stock  = document.getElementById("f-stock").value;
+    const image  = document.getElementById("f-image").value;
+    const desc   = document.getElementById("f-desc").value.trim();
+	const audio = document.getElementById("f-audio").value;
+
+    if (!name)   { showMsg("❌ 請輸入商品名稱", "error"); return; }
+    if (!price)  { showMsg("❌ 請輸入價格", "error"); return; }
+    if (!series) { showMsg("❌ 請選擇系列", "error"); return; }
+    if (!color)  { showMsg("❌ 請輸入顏色", "error"); return; }
+    if (!stock)  { showMsg("❌ 請輸入庫存數量", "error"); return; }
+    if (!image)  { showMsg("❌ 請上傳商品圖片", "error"); return; }
+
+    // ── 送出 API ──
+    const btn = document.getElementById("btn-submit");
+    btn.disabled = true;
+    btn.textContent = "儲存中…";
+
+    const body = { name, price, series, color, image, stock, description: desc, audio };
+
+	fetch(API + "/api/admin/products", {
+	  method: "POST",
+	  headers: {
+	    "Content-Type": "application/json",
+	    "Authorization": "Bearer " + token
+	  },
+	  body: JSON.stringify(body)
+	})
+	.then(r => r.json())
+	.then(data => {
+	  const productId = data.id;
+
+	  const anglePromises = angleImages.map(img =>
+	    fetch(API + "/api/products/" + productId + "/images", {
+	      method: "POST",
+	      headers: {
+	        "Content-Type": "application/json",
+	        "Authorization": "Bearer " + token
+	      },
+	      body: JSON.stringify({ imageUrl: img.url, sortOrder: img.sortOrder })
+	    })
+	  );
+
+	  return Promise.all(anglePromises);
+	})
+	.then(() => {
+	  showMsg("✅ 商品與角度照片新增成功！3 秒後返回列表…", "success");
+	  btn.textContent = "已儲存";
+	  setTimeout(() => { location.href = "admin.html"; }, 3000);
+	})
+	.catch(err => {
+	  showMsg("❌ 新增失敗：" + err, "error");
+	  btn.disabled = false;
+	  btn.textContent = "儲存商品";
+	});
+  }
+
+  /* ════ 顯示訊息 ════ */
+  function showMsg(text, type) {
+    const box = document.getElementById("msg-box");
+    box.textContent = text;
+    box.className = "msg-box msg-" + type;
+    // 捲動到訊息位置
+    box.scrollIntoView({ behavior: "smooth", block: "center" });
+  }
+  // 動態載入系列選單
+  function loadSeriesOptions() {
+    fetch(API + "/api/products/series")
+      .then(r => r.json())
+      .then(list => {
+        const datalist = document.getElementById("series-list");
+        // 重設選單
+        datalist.innerHTML = '<option value="">請選擇系列…</option>';
+        // 把每個系列加進去
+        list.forEach(series => {
+          const opt = document.createElement("option");
+          opt.value = series;
+          opt.textContent = series;
+          datalist.appendChild(opt);
+        });
+      })
+      .catch(() => {
+        // 如果 API 失敗，fallback 回固定選項
+        document.getElementById("series-list").innerHTML = `
+          <option value="">請選擇系列…</option>
+          <option value="Vintage Collection">Vintage Collection</option>
+          <option value="Modern Collection">Modern Collection</option>
+        `;
+      });
+  }
+
+  // 頁面載入時執行
+  loadSeriesOptions();
+</script>
+</body>
+</html>

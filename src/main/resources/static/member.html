@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ScreamRose | 會員中心</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="header.js" defer></script>
+  <style>
+    .member-container {
+      max-width: 860px;
+      margin: 60px auto;
+      padding: 0 20px;
+    }
+
+    /* 頂部會員資訊 */
+    .member-hero {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      background: #1a1a1a;
+      border: 1px solid #2a2a2a;
+      border-radius: 12px;
+      padding: 30px;
+      margin-bottom: 32px;
+    }
+    .member-avatar {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: #b30000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 26px;
+      font-weight: 500;
+      color: #fff;
+      flex-shrink: 0;
+    }
+    .member-name {
+      font-size: 22px;
+      font-weight: 500;
+      margin: 0 0 4px;
+    }
+    .member-email {
+      font-size: 14px;
+      color: #666;
+      margin: 0;
+    }
+    .logout-btn {
+      margin-left: auto;
+      padding: 10px 20px;
+      background: transparent;
+      border: 1px solid #444;
+      color: #aaa;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .logout-btn:hover { border-color: #888; color: #fff; }
+
+    /* 分頁標籤 */
+    .tab-bar {
+      display: flex;
+      border-bottom: 1px solid #2a2a2a;
+      margin-bottom: 30px;
+      gap: 4px;
+    }
+    .tab {
+      padding: 12px 24px;
+      font-size: 14px;
+      color: #666;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      transition: color 0.2s;
+    }
+    .tab:hover { color: #ccc; }
+    .tab.active {
+      color: #c9a44c;
+      border-bottom-color: #c9a44c;
+    }
+
+    /* 訂單列表 */
+    .order-card {
+      background: #1a1a1a;
+      border: 1px solid #2a2a2a;
+      border-radius: 10px;
+      padding: 24px;
+      margin-bottom: 16px;
+    }
+    .order-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid #2a2a2a;
+    }
+    .order-number {
+      font-size: 13px;
+      color: #666;
+    }
+    .order-date {
+      font-size: 13px;
+      color: #555;
+    }
+    .order-status {
+      font-size: 12px;
+      padding: 4px 12px;
+      border-radius: 99px;
+    }
+    .status-paid { background: #002a00; color: #6bff6b; }
+    .status-pending { background: #2a2000; color: #ffc06b; }
+    .status-shipped { background: #00002a; color: #6b9fff; }
+    .order-item {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .order-item img {
+      width: 70px;
+      border-radius: 6px;
+    }
+    .order-item-info h4 { margin: 0 0 4px; font-size: 15px; }
+    .order-item-info p { margin: 0; font-size: 13px; color: #666; }
+    .order-total {
+      margin-left: auto;
+      font-size: 16px;
+      color: #c9a44c;
+    }
+
+    /* 個人資料 */
+    .profile-form {
+      background: #1a1a1a;
+      border: 1px solid #2a2a2a;
+      border-radius: 10px;
+      padding: 30px;
+    }
+    .profile-group {
+      margin-bottom: 20px;
+    }
+    .profile-group label {
+      display: block;
+      font-size: 13px;
+      color: #aaa;
+      margin-bottom: 8px;
+    }
+    .profile-group input {
+      width: 100%;
+      padding: 12px 16px;
+      background: #111;
+      border: 1px solid #333;
+      color: #f1f1f1;
+      font-size: 15px;
+      border-radius: 6px;
+      outline: none;
+      box-sizing: border-box;
+      transition: border-color 0.2s;
+    }
+    .profile-group input:focus { border-color: #c9a44c; }
+    .profile-group input:disabled {
+      color: #555;
+      cursor: not-allowed;
+    }
+    .save-btn {
+      padding: 12px 32px;
+      background: #b30000;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      font-size: 15px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .save-btn:hover { background: #ff1a1a; }
+
+    .empty-state {
+      text-align: center;
+      padding: 60px 0;
+      color: #555;
+    }
+    .empty-state p { margin-bottom: 20px; }
+    .empty-state a {
+      color: #c9a44c;
+      text-decoration: none;
+      border: 1px solid #c9a44c;
+      padding: 10px 24px;
+      border-radius: 6px;
+    }
+  </style>
+</head>
+<body>
+
+<header class="top-bar">
+  <a href="index.html" class="brand" style="text-decoration:none; color:inherit;">ScreamRose</a>
+  <nav>
+    <a href="index.html">← 回到首頁</a>
+  </nav>
+  <div class="cart">
+	<span id="auth-area"></span>
+	  &nbsp;&nbsp;🛒 <span id="cart-count">0</span>
+  </div>
+</header>
+
+<div class="member-container">
+
+  <!-- 會員資訊區 -->
+  <div class="member-hero">
+    <div class="member-avatar" id="member-avatar">?</div>
+    <div>
+      <p class="member-name" id="member-name">載入中...</p>
+      <p class="member-email" id="member-email"></p>
+    </div>
+    <button class="logout-btn" onclick="handleLogout()">登出</button>
+  </div>
+
+  <!-- 分頁標籤 -->
+  <div class="tab-bar">
+    <div class="tab active" onclick="switchTab('orders', this)">訂單紀錄</div>
+    <div class="tab" onclick="switchTab('profile', this)">個人資料</div>
+  </div>
+
+  <!-- 訂單紀錄 -->
+  <div id="tab-orders">
+    <div id="order-list"></div>
+  </div>
+
+  <!-- 個人資料 -->
+  <div id="tab-profile" style="display:none;">
+    <div class="profile-form">
+      <div class="profile-group">
+        <label>姓名</label>
+        <input type="text" id="profile-name" placeholder="請輸入姓名">
+      </div>
+      <div class="profile-group">
+        <label>Email（不可修改）</label>
+        <input type="email" id="profile-email" disabled>
+      </div>
+      <div class="profile-group">
+        <label>電話</label>
+        <input type="tel" id="profile-phone" placeholder="請輸入電話">
+      </div>
+      <div class="profile-group">
+        <label>常用地址</label>
+        <input type="text" id="profile-address" placeholder="請輸入常用收件地址">
+      </div>
+      <button class="save-btn" onclick="saveProfile()">儲存變更</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  // 購物車數量
+  const cartData = JSON.parse(localStorage.getItem("cart")) || [];
+  document.getElementById("cart-count").textContent = cartData.reduce((s, i) => s + (i.qty || 0), 0);
+
+  // 讀取會員資料
+  const member = JSON.parse(localStorage.getItem("member")) || null;
+
+  if (!member) {
+    // 未登入 → 跳回登入頁
+    window.location.href = "login.html";
+  } else {
+    const initial = (member.name || "?")[0].toUpperCase();
+    document.getElementById("member-avatar").textContent = initial;
+    document.getElementById("member-name").textContent = member.name || "會員";
+    document.getElementById("member-email").textContent = member.email || "";
+    document.getElementById("profile-name").value = member.name || "";
+    document.getElementById("profile-email").value = member.email || "";
+    document.getElementById("profile-phone").value = member.phone || "";
+    document.getElementById("profile-address").value = member.address || "";
+  }
+
+  // 分頁切換
+  function switchTab(tab, el) {
+    document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
+    el.classList.add("active");
+    document.getElementById("tab-orders").style.display = tab === "orders" ? "block" : "none";
+    document.getElementById("tab-profile").style.display = tab === "profile" ? "block" : "none";
+  }
+
+  // 載入訂單（之後接 Spring Boot API：GET /api/orders）
+	function loadOrders() {
+	  const orderList = document.getElementById("order-list");
+	  const token = localStorage.getItem("token");
+
+	  if (!token) {
+	    orderList.innerHTML = `<div class="empty-state"><p>請先登入</p></div>`;
+	    return;
+	  }
+
+	  fetch("/api/orders", {
+	    headers: { "Authorization": "Bearer " + token }
+	  })
+	  .then(async res => {
+	    if (!res.ok) throw new Error("載入失敗");
+	    return res.json();
+	  })
+	  .then(orders => {
+	    if (orders.length === 0) {
+	      orderList.innerHTML = `
+	        <div class="empty-state">
+	          <p>目前沒有訂單紀錄</p>
+	          <a href="index.html">去逛逛</a>
+	        </div>`;
+	      return;
+	    }
+	    orderList.innerHTML = orders.map(order => `
+	      <div class="order-card">
+	        <div class="order-header">
+	          <div>
+	            <p class="order-number">訂單編號：${order.id}</p>
+	            <p class="order-date">${order.createdAt ? order.createdAt.substring(0,10) : ""}</p>
+	          </div>
+	          <span class="order-status status-paid">已付款</span>
+	        </div>
+	        <div class="order-item">
+	          <div class="order-item-info">
+	            <h4>${order.productName}</h4>
+	            <p>數量：${order.quantity}</p>
+	          </div>
+	          <div class="order-total">NT$ ${order.price.toLocaleString()}</div>
+	        </div>
+	      </div>
+	    `).join("");
+	  })
+	  .catch(() => {
+	    orderList.innerHTML = `<div class="empty-state"><p>載入訂單失敗</p></div>`;
+	  });
+	}
+    
+
+  loadOrders();
+
+  // 儲存個人資料
+  function saveProfile() {
+    const name = document.getElementById("profile-name").value.trim();
+    const phone = document.getElementById("profile-phone").value.trim();
+    const address = document.getElementById("profile-address").value.trim();
+
+    if (!name) { alert("姓名不能為空！"); return; }
+
+    // 更新 localStorage
+    const updated = { ...member, name, phone, address };
+    localStorage.setItem("member", JSON.stringify(updated));
+    document.getElementById("member-name").textContent = name;
+    document.getElementById("member-avatar").textContent = name[0].toUpperCase();
+
+    alert("個人資料已更新！");
+  }
+
+  // 登出
+  function handleLogout() {
+    localStorage.removeItem("member");
+	localStorage.removeItem("token");
+    window.location.href = "index.html";
+  }
+</script>
+
+</body>
+</html>
