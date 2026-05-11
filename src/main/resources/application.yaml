@@ -13,3 +13,8 @@ spring:
       hibernate:
         # ③ dialect 改成 MariaDB
         dialect: org.hibernate.dialect.MariaDBDialect
+		
+cloudinary:
+  cloud-name: dwmyk1ycx
+  api-key: 573529115495586
+  api-secret: wHhJSV4NNgVQr87nAMy_m4XXpGw		
