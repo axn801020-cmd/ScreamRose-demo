@@ -1,20 +1,17 @@
 spring:
   datasource:
-    # ① jdbc:mysql 改成 jdbc:mariadb
     url: jdbc:mariadb://guitar-store-screamrose.i.aivencloud.com:18863/guitar_store?sslMode=trust&serverTimezone=Asia/Taipei
     username: avnadmin
     password: AVNS_IOAqaXmfO_Y4KY1qqFl
-    # ② driver 改成 MariaDB
     driver-class-name: org.mariadb.jdbc.Driver
   jpa:
     hibernate:
       ddl-auto: update
     properties:
       hibernate:
-        # ③ dialect 改成 MariaDB
         dialect: org.hibernate.dialect.MariaDBDialect
-		
+
 cloudinary:
   cloud-name: dwmyk1ycx
   api-key: 573529115495586
-  api-secret: wHhJSV4NNgVQr87nAMy_m4XXpGw		
+  api-secret: wHhJSV4NNgVQr87nAMy_m4XXpGw
