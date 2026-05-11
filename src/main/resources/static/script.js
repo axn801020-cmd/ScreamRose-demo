@@ -3,7 +3,7 @@ $(document).ready(function(){
   let allProducts = [];
 
   // 從資料庫撈商品
-  fetch("http://localhost:8080/api/products")
+  fetch("/api/products")
     .then(r => r.json())
     .then(products => {
       allProducts = products;

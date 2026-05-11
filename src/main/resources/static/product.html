@@ -217,7 +217,7 @@
   let isPlaying = false;
 
   // ===== 載入商品基本資料 =====
-  fetch("http://localhost:8080/api/products/" + id)
+  fetch("/api/products/" + id)
     .then(r => r.json())
     .then(product => {
       if (!product || !product.id) {
@@ -260,7 +260,7 @@
   
   // 改成接收第二個參數 mainImageUrl
   function loadProductImages(productId, mainImageUrl) {
-      fetch("http://localhost:8080/api/products/" + productId + "/images")
+      fetch("/api/products/" + productId + "/images")
         .then(r => r.json())
         .then(images => {
           const strip = document.getElementById("thumbnailStrip");
