@@ -343,7 +343,7 @@
         <td>NT$ ${Number(p.price).toLocaleString()}</td>
         <td>${p.stock}</td>
         <td>
-          <button class="btn-edit" onclick="openEdit(${p.id})">編輯</button>
+          <a class="btn-edit" href="admin-edit.html?id=${p.id}">編輯</a>
           <button class="btn-del"  onclick="deleteProduct(${p.id})">刪除</button>
         </td>
       </tr>
