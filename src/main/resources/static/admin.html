@@ -385,7 +385,7 @@
         document.getElementById("e-stock").value  = p.stock;
         document.getElementById("e-desc").value   = p.description || "";
         const prev = document.getElementById("e-preview");
-        if (p.image) { prev.src = "/" + p.image; prev.style.display = "block"; }
+        if (p.image) { prev.src = p.image; prev.style.display = "block"; }
         else { prev.style.display = "none"; }
         document.getElementById("edit-modal").classList.add("show");
       });
@@ -420,21 +420,20 @@
     const loading = document.getElementById(loadingId);
     loading.style.display = "inline";
     const formData = new FormData();
-    formData.append("file", file);
-    fetch(API + "/api/admin/upload", {
-      method: "POST",
-      headers: { "Authorization": "Bearer " + token },
-      body: formData
-    })
-    .then(r => r.json())
-    .then(data => {
-      loading.style.display = "none";
-      if (data.error) { alert("上傳失敗：" + data.error); return; }
-      document.getElementById(imageFieldId).value = data.imageUrl;
-      const preview = document.getElementById(previewId);
-      preview.src = "/" + data.imageUrl;
-      preview.style.display = "block";
-    })
+	formData.append("file", file);
+	formData.append("upload_preset", "screamrose_upload");  // ← 加這行
+	fetch("https://api.cloudinary.com/v1_1/dwmyk1ycx/image/upload", {  // ← 改這行
+	  method: "POST",
+	  body: formData  // ← 拿掉 headers 那行
+	})
+	.then(r => r.json())
+	.then(data => {
+	  loading.style.display = "none";
+	  document.getElementById(imageFieldId).value = data.secure_url;  // ← 改 imageUrl → secure_url
+	  const preview = document.getElementById(previewId);
+	  preview.src = data.secure_url;  // ← 拿掉 "/" + ，改成 data.secure_url
+	  preview.style.display = "block";
+	})
     .catch(err => {
       loading.style.display = "none";
       alert("上傳失敗：" + err);
