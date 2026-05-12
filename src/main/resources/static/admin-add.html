@@ -392,7 +392,8 @@
 
     // 逐一上傳每張照片
     const uploadPromises = files.map(file => {
-      const formData = new FormData();
+		const formData = new FormData();
+      formData.append("file", file);
 	  formData.append("upload_preset", "screamrose_upload");
 	  return fetch("https://api.cloudinary.com/v1_1/dwmyk1ycx/image/upload", {
 	    method: "POST",
@@ -457,7 +458,7 @@
     formData.append("file", file);
 
 	formData.append("upload_preset", "screamrose_upload");
-	fetch("https://api.cloudinary.com/v1_1/dwmyk1ycx/video/upload", {
+	fetch("https://api.cloudinary.com/v1_1/dwmyk1ycx/raw/upload", {
 	  method: "POST",
 	  body: formData
 	})
