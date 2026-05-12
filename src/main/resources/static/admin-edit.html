@@ -167,7 +167,7 @@
   // 載入商品資料
   function loadProduct() {
     fetch(API + "/api/products/" + productId)
-      .then(r => r.json())
+      .then(r => r.text())
       .then(p => {
         document.getElementById("f-name").value  = p.name;
         document.getElementById("f-price").value = p.price;
