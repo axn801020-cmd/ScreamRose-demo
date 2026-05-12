@@ -167,7 +167,7 @@
   // 載入商品資料
   function loadProduct() {
     fetch(API + "/api/products/" + productId)
-      .then(r => r.text())
+      .then(r => r.json())
       .then(p => {
         document.getElementById("f-name").value  = p.name;
         document.getElementById("f-price").value = p.price;
@@ -339,7 +339,7 @@
       headers: { "Content-Type": "application/json", "Authorization": "Bearer " + token },
       body: JSON.stringify({ name, price, series, color, image, stock, description: desc, audio })
     })
-    .then(r => r.json())
+    .then(r => r.text())
     .then(() => {
       // 刪除移除的角度照片
       const deletePromises = deletedAngleIds.map(id =>
