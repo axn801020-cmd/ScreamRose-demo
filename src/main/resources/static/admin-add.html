@@ -506,23 +506,20 @@
 
     const formData = new FormData();
     formData.append("file", file);
+	formData.append("upload_preset", "screamrose_upload");
 
-    fetch(API + "/api/admin/upload", {
-      method: "POST",
-      headers: { "Authorization": "Bearer " + token },
-      body: formData
-    })
+	fetch("https://api.cloudinary.com/v1_1/dwmyk1ycx/image/upload", {
+	  method: "POST",
+	  body: formData
+	})
     .then(r => r.json())
     .then(data => {
       document.getElementById("upload-loading").style.display = "none";
-      if (data.error) {
-        showMsg("❌ 圖片上傳失敗：" + data.error, "error");
-        return;
-      }
+    
       // 儲存後端回傳的路徑
-      document.getElementById("f-image").value = data.imageUrl;
+      document.getElementById("f-image").value = data.secure_url;
       const fname = document.getElementById("upload-filename");
-      fname.textContent = "✅ " + data.imageUrl;
+      fname.textContent = "✅ 上傳成功";
       fname.style.display = "block";
     })
     .catch(err => {
