@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: jdbc:mariadb://guitar-store-screamrose.i.aivencloud.com:18863/guitar_store?sslMode=trust&serverTimezone=Asia/Taipei
-    username: avnadmin
-    password: AVNS_IOAqaXmfO_Y4KY1qqFl
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
     driver-class-name: org.mariadb.jdbc.Driver
   jpa:
     hibernate:
@@ -12,6 +12,6 @@ spring:
         dialect: org.hibernate.dialect.MariaDBDialect
 
 cloudinary:
-  cloud-name: dwmyk1ycx
-  api-key: 573529115495586
-  api-secret: wHhJSV4NNgVQr87nAMy_m4XXpGw
+  cloud-name: ${CLOUDINARY_CLOUD_NAME}
+  api-key: ${CLOUDINARY_API_KEY}
+  api-secret: ${CLOUDINARY_API_SECRET}
