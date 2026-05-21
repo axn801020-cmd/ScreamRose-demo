@@ -1,3 +1,15 @@
+(function() {
+  var s = document.createElement('script');
+  s.async = true;
+  s.src = 'https://www.googletagmanager.com/gtag/js?id=G-3QNPXHTV71';
+  document.head.appendChild(s);
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  window.gtag = gtag;
+  gtag('js', new Date());
+  gtag('config', 'G-3QNPXHTV71');
+})();
+
 // header.js — 所有頁面共用，自動處理登入/登出狀態顯示
 
 document.addEventListener("DOMContentLoaded", function () {
